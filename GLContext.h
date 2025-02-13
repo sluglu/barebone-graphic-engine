@@ -15,6 +15,7 @@
 #include <commdlg.h>
 #include <iostream>
 #include <chrono>
+#include <random>
 
 
 
@@ -61,6 +62,9 @@ namespace GLContext {
 			years = localtime(&now_time)->tm_year;
 		}
 	};
+
+	int randomInt(int min, int max);
+	double randomDouble(double min, double max);
 
 	int init(int width = 500, int height = 500);
 	

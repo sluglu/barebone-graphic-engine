@@ -30,6 +30,21 @@ namespace GLContext {
     void (*initialize)() {};
     void (*onDrawUI)() {};
 
+    std::random_device rd;
+    std::mt19937 gen(rd()); 
+
+
+    int randomInt(int min, int max) {
+        std::uniform_int_distribution<int> dist(min, max);
+        return dist(gen);
+    }
+
+
+    double randomDouble(double min, double max) {
+        std::uniform_real_distribution<double> dist(min, max);
+        return dist(gen);
+    }
+
 	void setWindowName(const char* name) {
 		window_name = name;
         glfwSetWindowTitle(window, name);

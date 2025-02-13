@@ -76,10 +76,11 @@ namespace GLContext {
 	double getSimTimeStep();
 	void setSimTimeStep(double step);
 	
-	void drawPoint(vec2 position, float size = 5, vec4 color = vec4(1, 1, 1, 1));
-	void drawLine(vec2 position1, vec2 position2, float width = 1, vec4 color = vec4(1, 1, 1, 1));
-	void drawSquare(vec2 pos, float Size = 1.0f, float Thickness = 2.0f, vec4 Color = vec4(1, 1, 1, 1));
-	void drawCircle(vec2 pos, float radius = 1.0f, int numSegments = 5, float Thickness = 2.0f, vec4 Color = vec4(1, 1, 1, 1));
+	void drawPoint(vec2 position, double size = 5, vec4 color = vec4(1, 1, 1, 1));
+	void drawLine(vec2 position1, vec2 position2, double width = 1, vec4 color = vec4(1, 1, 1, 1));
+	void drawSquare(vec2 pos, double Size = 1.0f, double Thickness = 2.0f, vec4 Color = vec4(1, 1, 1, 1));
+	void drawRect(vec2 inferiorLeft, vec2 superiorRight, double Thickness, vec4 Color);
+	void drawCircle(vec2 pos, double radius = 1.0f, int numSegments = 5, double Thickness = 2.0f, vec4 Color = vec4(1, 1, 1, 1));
 	void alphaClear();
 
 

@@ -304,7 +304,7 @@ namespace GLContext {
     }
 
 
-    void drawPoint(vec2 position, float Thickness, vec4 Color) {
+    void drawPoint(vec2 position, double Thickness, vec4 Color) {
         glColor4f(Color.x, Color.y, Color.z, Color.w);
         glPointSize(Thickness);
         glBegin(GL_POINTS);
@@ -312,7 +312,7 @@ namespace GLContext {
         glEnd();
     }
 
-    void drawLine(vec2 position1, vec2 position2, float Thickness, vec4 Color) {
+    void drawLine(vec2 position1, vec2 position2, double Thickness, vec4 Color) {
         glColor4f(Color.x, Color.y, Color.z, Color.w);
         glLineWidth(Thickness);
         glBegin(GL_LINES);
@@ -321,9 +321,9 @@ namespace GLContext {
         glEnd();
     }
 
-    void drawSquare(vec2 pos, float Size, float Thickness, vec4 Color) {
-        float x = pos.x;
-        float y = pos.y;
+    void drawSquare(vec2 pos, double Size, double Thickness, vec4 Color) {
+        double x = pos.x;
+        double y = pos.y;
         vec2 a = vec2(x - Size / 2.0f, y + Size / 2.0f);
         vec2 b = vec2(x + Size / 2.0f, y + Size / 2.0f);
         vec2 c = vec2(x + Size / 2.0f, y - Size / 2.0f);
@@ -338,14 +338,24 @@ namespace GLContext {
         drawLine(d, a, Thickness, Color);
     }
 
-    void drawCircle(vec2 pos, float radius, int numSegments, float Thickness, vec4 Color) {
+    void drawRect(vec2 inferiorLeft, vec2 superiorRight, double Thickness, vec4 Color)
+    {
+		vec2 superiorLeft = vec2(inferiorLeft.x, superiorRight.y);
+		vec2 inferiorRight = vec2(superiorRight.x, inferiorLeft.y);
+        drawLine(inferiorLeft, inferiorRight, Thickness, Color);
+        drawLine(inferiorRight, superiorRight, Thickness, Color);
+		drawLine(superiorRight, superiorLeft, Thickness, Color);
+		drawLine(superiorLeft, inferiorLeft, Thickness, Color);
+    }
+
+    void drawCircle(vec2 pos, double radius, int numSegments, double Thickness, vec4 Color) {
         glColor4f(Color.x, Color.y, Color.z, Color.w);
         glLineWidth(Thickness);
         glBegin(GL_LINE_LOOP);
         for (int i = 0; i < numSegments; i++) {
-            float theta = 2.0f * 3.14159265358979323846264338327950f * static_cast<float>(i) / static_cast<float>(numSegments);
-            float x = radius * cosf(theta);
-            float y = radius * sinf(theta);
+            double theta = 2.0f * 3.14159265358979323846264338327950f * static_cast<double>(i) / static_cast<double>(numSegments);
+            double x = radius * cosf(theta);
+            double y = radius * sinf(theta);
             glVertex2f(pos.x + x, pos.y + y);
         }
         glEnd();

@@ -28,6 +28,9 @@ namespace GLContext {
 	extern int SCR_WIDTH;
 	extern int SCR_HEIGHT;
 
+	extern double simTime;
+	extern double simTimeStep;
+
 	extern int viewportResW;
 	extern int viewportResH;
 
@@ -48,8 +51,7 @@ namespace GLContext {
 		Time() {
 			auto now = std::chrono::system_clock::now();
 			std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-			struct tm time_info;
-			localtime_s(&time_info, &now_time);
+
 			seconds = localtime(&now_time)->tm_sec;
 			minutes = localtime(&now_time)->tm_min;
 			hours = localtime(&now_time)->tm_hour;
@@ -67,6 +69,12 @@ namespace GLContext {
 
 	double getElapsedTime();
 	Time getAbsoluteTime();
+
+	void restartSimTimer();
+	double getSimTime();
+	void incrementSimTimer();
+	double getSimTimeStep();
+	void setSimTimeStep(double step);
 	
 	void drawPoint(vec2 position, float size = 5, vec4 color = vec4(1, 1, 1, 1));
 	void drawLine(vec2 position1, vec2 position2, float width = 1, vec4 color = vec4(1, 1, 1, 1));

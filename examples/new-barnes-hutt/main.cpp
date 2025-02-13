@@ -12,11 +12,16 @@ float n = 0.0f;
 
 
 void frame() {
-	i = cos(getElapsedTime());
-	n = (sin(getElapsedTime()) + 1)*10;
-	Color = vec4(cos(getElapsedTime()), sin(getElapsedTime()), tan(getElapsedTime()), 1);
-	GLContext::drawCircle(pos,i,n,Thickness,Color);
-	cout << getAbsoluteTime().seconds << endl;
+	//i = cos(getElapsedTime());
+	//n = (sin(getElapsedTime()) + 1)*10;
+	//Color = vec4(cos(getElapsedTime()), sin(getElapsedTime()), tan(getElapsedTime()), 1);
+	//GLContext::drawCircle(pos,i,n,Thickness,Color);
+	//cout << getAbsoluteTime().seconds << endl;
+
+	//incrementSimTimer();
+	//cout << getSimTime() << endl;
+
+
 }
 
 void ui() {
@@ -26,6 +31,13 @@ void ui() {
 		ImGui::InputFloat("radius", &radius);
 		ImGui::InputFloat("Thickness", &Thickness);
 		ImGui::ColorEdit4("Color", &Color[0]);
+		double step = getSimTimeStep();
+		if (ImGui::InputDouble("Time Step", &step)) {
+			setSimTimeStep(step);
+		}
+		if(ImGui::Button("Restart Timer") ){
+			restartSimTimer();
+		};
 	ImGui::End();
 }
 
@@ -33,5 +45,6 @@ void main() {
 	GLContext::onDrawUI = ui;
 	GLContext::onDraw = frame;
 	GLContext::fpsCounter = true;
+	GLContext::setSimTimeStep(0.0001);
 	GLContext::init(1000, 1000);
 }

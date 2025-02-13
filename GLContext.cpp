@@ -12,6 +12,8 @@ namespace GLContext {
     GLuint fbo = 0;
     GLuint texture = 0;
 
+    double simTime = 0.0;
+	double simTimeStep = 0.01;
 
     const char* window_name = "  ";
     bool alpha = false;
@@ -48,6 +50,30 @@ namespace GLContext {
             string fpsLabel = "fps : " + to_string(ImGui::GetIO().Framerate);
             setWindowName(fpsLabel.c_str());
         }
+    }
+
+    void restartSimTimer(){
+		simTime = 0.0;
+    }
+
+    double getSimTime()
+    {
+        return simTime;
+    }
+
+    void incrementSimTimer()
+    {
+		simTime += simTimeStep;
+    }
+
+    double getSimTimeStep()
+    {
+        return simTimeStep;
+    }
+
+    void setSimTimeStep(double step)
+    {
+		simTimeStep = step;
     }
 
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -277,7 +303,6 @@ namespace GLContext {
         else { return "Not saved"; }
     }
 
-    
 
     void drawPoint(vec2 position, float Thickness, vec4 Color) {
         glColor4f(Color.x, Color.y, Color.z, Color.w);

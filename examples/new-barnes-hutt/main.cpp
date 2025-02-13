@@ -1,4 +1,5 @@
 #include <GLContext.h>
+#include <QuadTree.h>
 
 using namespace GLContext;
 
@@ -21,7 +22,13 @@ void frame() {
 	//incrementSimTimer();
 	//cout << getSimTime() << endl;
 
+	//drawRect(vec2(-0.5, -0.5), vec2(0.5, 0.5), 5, vec4(1, 1, 1, 1));
 
+	AABB aabb1 = AABB(-0.5, 0.5, -0.5, 0.5);
+
+	for (int i = 0; i < 4; i++) {
+		aabb1.getChild(i).draw(5, vec4(1, 1, 1, 1));
+	}
 }
 
 void ui() {

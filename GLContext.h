@@ -39,7 +39,7 @@ namespace GLContext {
 	extern vec4 background;
 	extern void (*onInput)(int key);
 	extern void (*onDraw)();
-	extern void (*initialize)();
+	extern void (*onInit)();
 	extern void (*onDrawUI)();
 
 	struct Time {
@@ -63,8 +63,8 @@ namespace GLContext {
 		}
 	};
 
-	int randomInt(int min, int max);
-	double randomDouble(double min, double max);
+	int randomInt(int min = -1000, int max = 1000);
+	double randomDouble(double min = -1, double max = 1);
 
 	int init(int width = 500, int height = 500);
 	
@@ -80,11 +80,16 @@ namespace GLContext {
 	void incrementSimTimer();
 	double getSimTimeStep();
 	void setSimTimeStep(double step);
+
+	void setWindowSize(int width, int height);
+	void setViewportSize(int width, int height);
+	pair<int, int> getWindowSize();
+	pair<int, int> getViewportSize();
 	
 	void drawPoint(vec2 position, double size = 5, vec4 color = vec4(1, 1, 1, 1));
 	void drawLine(vec2 position1, vec2 position2, double width = 1, vec4 color = vec4(1, 1, 1, 1));
 	void drawSquare(vec2 pos, double Size = 1.0f, double Thickness = 2.0f, vec4 Color = vec4(1, 1, 1, 1));
-	void drawRect(vec2 inferiorLeft, vec2 superiorRight, double Thickness, vec4 Color);
+	void drawRect(vec2 superiorLeft, vec2 inferiorRight, double Thickness = 1.5, vec4 Color = vec4(1, 1, 1, 1));
 	void drawCircle(vec2 pos, double radius = 1.0f, int numSegments = 5, double Thickness = 2.0f, vec4 Color = vec4(1, 1, 1, 1));
 	void alphaClear();
 

@@ -27,7 +27,7 @@ namespace GLContext {
     vec4 background = vec4(0.1f, 0.1f, 0.1f, 1.0f);
     void (*onInput)(int key) {};
     void (*onDraw)() {};
-    void (*initialize)() {};
+    void (*onInit)() {};
     void (*onDrawUI)() {};
 
     std::random_device rd;
@@ -91,10 +91,33 @@ namespace GLContext {
 		simTimeStep = step;
     }
 
+    void setWindowSize(int width, int height)
+    {
+		SCR_WIDTH = width;
+		SCR_HEIGHT = height;
+		glfwSetWindowSize(window, width, height);
+    }
+
+    void setViewportSize(int width, int height)
+    {
+		viewportResW = width;
+		viewportResH = height;
+    }
+
+    pair<int, int> getWindowSize()
+    {
+        return pair<int, int>(SCR_WIDTH,SCR_HEIGHT);
+    }
+
+    pair<int, int> getViewportSize()
+    {
+        return pair<int, int>(viewportResW,viewportResH);
+    }
+
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     {
         glfwGetWindowSize(window, &SCR_WIDTH, &SCR_HEIGHT);
-        glViewport(0, 0, width, height);
+        glViewport(0, 0, width, height);        
     }
 
     void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -183,7 +206,7 @@ namespace GLContext {
                     std::cout << "framebuffer creation failure" << endl;
                 }
 
-                glViewport(0, 0, viewportResW, viewportResW);
+                glViewport(0, 0, viewportResW, viewportResH);
 
                 onDraw(); 
 
@@ -256,13 +279,13 @@ namespace GLContext {
 
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
         {
-            std::cout << "Failed to initialize GLAD" << endl;
+            std::cout << "Failed to onInit GLAD" << endl;
             return -1;
         }
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         //cout << "OpenGL version : " << glGetString(GL_VERSION) << endl;
-        if (initialize) { initialize(); }
+        if (onInit) { onInit(); }
         if (onDraw) {
             glGenFramebuffers(1, &GLContext::fbo);
             glGenTextures(1, &GLContext::texture);
@@ -318,12 +341,11 @@ namespace GLContext {
         else { return "Not saved"; }
     }
 
-
     void drawPoint(vec2 position, double Thickness, vec4 Color) {
         glColor4f(Color.x, Color.y, Color.z, Color.w);
         glPointSize(Thickness);
         glBegin(GL_POINTS);
-        glVertex2f(position.x, position.y);
+        glVertex2d(position.x, position.y);
         glEnd();
     }
 
@@ -331,8 +353,8 @@ namespace GLContext {
         glColor4f(Color.x, Color.y, Color.z, Color.w);
         glLineWidth(Thickness);
         glBegin(GL_LINES);
-        glVertex2f(position1.x, position1.y);
-        glVertex2f(position2.x, position2.y);
+        glVertex2d(position1.x, position1.y);
+        glVertex2d(position2.x, position2.y);
         glEnd();
     }
 
@@ -355,12 +377,15 @@ namespace GLContext {
 
     void drawRect(vec2 inferiorLeft, vec2 superiorRight, double Thickness, vec4 Color)
     {
-		vec2 superiorLeft = vec2(inferiorLeft.x, superiorRight.y);
-		vec2 inferiorRight = vec2(superiorRight.x, inferiorLeft.y);
-        drawLine(inferiorLeft, inferiorRight, Thickness, Color);
-        drawLine(inferiorRight, superiorRight, Thickness, Color);
-		drawLine(superiorRight, superiorLeft, Thickness, Color);
-		drawLine(superiorLeft, inferiorLeft, Thickness, Color);
+        glColor4f(Color.x, Color.y, Color.z, Color.w);
+        glLineWidth(Thickness);
+        glBegin(GL_LINE_LOOP);
+        glVertex2d(inferiorLeft.x, superiorRight.y);
+        glVertex2d(superiorRight.x, superiorRight.y);
+        glVertex2d(superiorRight.x, inferiorLeft.y);
+        glVertex2d(inferiorLeft.x, inferiorLeft.y);
+        glEnd();
+		
     }
 
     void drawCircle(vec2 pos, double radius, int numSegments, double Thickness, vec4 Color) {
@@ -371,7 +396,7 @@ namespace GLContext {
             double theta = 2.0f * 3.14159265358979323846264338327950f * static_cast<double>(i) / static_cast<double>(numSegments);
             double x = radius * cosf(theta);
             double y = radius * sinf(theta);
-            glVertex2f(pos.x + x, pos.y + y);
+            glVertex2d(pos.x + x, pos.y + y);
         }
         glEnd();
     }
@@ -382,4 +407,5 @@ namespace GLContext {
         glClearColor(background.x, background.y, background.z, background.w);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
+
 }

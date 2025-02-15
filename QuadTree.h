@@ -8,36 +8,36 @@
 // =========================
 class AABB {
 public:
-    double xMin, xMax, yMin, yMax;
+    vec2 inferiorLeft, superiorRight;
 
-    AABB(double xMin, double xMax, double yMin, double yMax)
-        : xMin(xMin), xMax(xMax), yMin(yMin), yMax(yMax) {
+    AABB(vec2 inferiorLeft, vec2 superiorRight)
+        : inferiorLeft(inferiorLeft), superiorRight(superiorRight){
     }
 
     bool contains(double x, double y) const {
-        return x >= xMin && x <= xMax && y >= yMin && y <= yMax;
+        return x >= inferiorLeft.x && x <= superiorRight.x && y >= inferiorLeft.y && y <= superiorRight.y;
     }
 
     bool intersects(const AABB& other) const {
-        return !(xMax < other.xMin || xMin > other.xMax ||
-            yMax < other.yMin || yMin > other.yMax);
+        return !(superiorRight.x < other.inferiorLeft.x || inferiorLeft.x > other.superiorRight.x ||
+            superiorRight.y < other.inferiorLeft.y || inferiorLeft.y > other.superiorRight.y);
     }
 
     AABB getChild(int index) const {
-        double midX = (xMin + xMax) / 2.0;
-        double midY = (yMin + yMax) / 2.0;
+        double midX = (inferiorLeft.x + superiorRight.x) / 2.0;
+        double midY = (inferiorLeft.y + superiorRight.y) / 2.0;
 
         switch (index) {
-        case 0: return AABB(midX, xMax, midY, yMax);  // Top Right
-        case 1: return AABB(xMin, midX, midY, yMax);  // Top Left
-        case 2: return AABB(xMin, midX, yMin, midY);  // Bottom Left
-        case 3: return AABB(midX, xMax, yMin, midY);  // Bottom Right
+        case 0: return AABB(vec2(midX, midY), vec2(superiorRight.x, superiorRight.y));  // Top Right
+        case 1: return AABB(vec2(inferiorLeft.x, midY), vec2(midX, superiorRight.y));  // Top Left
+        case 2: return AABB(vec2(inferiorLeft.x, inferiorLeft.y), vec2(midX, midY));  // Bottom Left
+        case 3: return AABB(vec2(midX, inferiorLeft.y), vec2(superiorRight.x, midY));  // Bottom Right
         default: throw std::out_of_range("Invalid quadrant index");
         }
     }
 
 	void draw(double Thickness = 1.0, vec4 Color = vec4(1,1,1,1)) const {
-        GLContext::drawRect(vec2(xMin, yMin), vec2(xMax, yMax), Thickness, Color);
+        GLContext::drawRect(vec2(inferiorLeft.x, inferiorLeft.y*-1), vec2(superiorRight.x, superiorRight.y * -1), Thickness, Color);
 	}
 };
 
@@ -78,7 +78,7 @@ public:
         return result;
     }
 
-	void draw(double Thickness = 1.0, vec4 Color = vec4(1, 1, 1, 1)) const {
+	void draw(double Thickness = 5.0, vec4 Color = vec4(1, 1, 1, 1)) const {
 		root->draw(Thickness, Color);
 	}
 

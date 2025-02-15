@@ -11,6 +11,10 @@ vec4 Color = vec4(1, 1, 1, 1);
 float i = 0.0f;
 float n = 0.0f;
 
+void init() {
+	//setViewportSize(100, 100);
+}
+
 
 void frame() {
 	//i = cos(getElapsedTime());
@@ -24,19 +28,20 @@ void frame() {
 
 	//drawRect(vec2(-0.5, -0.5), vec2(0.5, 0.5), 5, vec4(1, 1, 1, 1));
 
-	//AABB aabb1 = AABB(-0.5, 0.5, -0.5, 0.5);
+	//AABB aabb1 = AABB(vec2(-0.5, -0.5), vec2(0.9, 0.9));
+	//aabb1.draw(5, vec4(1, 1, 1, 1));
 
 	//for (int i = 0; i < 4; i++) {
 	//	aabb1.getChild(i).draw(5, vec4(1, 1, 1, 1));
 	//}
 
-	Quadtree<int> quadtree = Quadtree<int>(AABB(-1, 1, -1, 1));
+	Quadtree<int> quadtree = Quadtree<int>(AABB(vec2(-1,-1),vec2(1, 1)));
 	for (int i = 0; i < 100; i++) {
-		quadtree.insert(i, cos(), cos());
+		quadtree.insert(i, 0.5, -0.5);
 	}
 
 
-	quadtree.draw(1, vec4(1, 1, 1, 1));
+	quadtree.draw(1.5, vec4(1, 1, 1, 1));
 }
 
 void ui() {
@@ -57,6 +62,7 @@ void ui() {
 }
 
 void main() {
+	GLContext::onInit = init;
 	GLContext::onDrawUI = ui;
 	GLContext::onDraw = frame;
 	GLContext::fpsCounter = true;

@@ -15,7 +15,7 @@ public:
     }
 
     bool contains(double x, double y) const {
-        return x >= inferiorLeft.x && x <= superiorRight.x && y >= inferiorLeft.y && y <= superiorRight.y;
+        return x >= inferiorLeft.x && x < superiorRight.x && y >= inferiorLeft.y && y < superiorRight.y;
     }
 
     bool intersects(const AABB& other) const {
@@ -37,7 +37,7 @@ public:
     }
 
 	void draw(double Thickness = 1.0, vec4 Color = vec4(1,1,1,1)) const {
-        GLContext::drawRect(vec2(inferiorLeft.x, inferiorLeft.y*-1), vec2(superiorRight.x, superiorRight.y * -1), Thickness, Color);
+        GLContext::drawRect(inferiorLeft, superiorRight, Thickness, Color);
 	}
 };
 
@@ -86,16 +86,35 @@ private:
     size_t maxObjects, maxDepth;
     std::unique_ptr<Node> root;
 
-    void insert(Node* node, const T& object, double x, double y, size_t depth) {
-        if (!node->bounds.contains(x, y)) return;
 
-        if (depth >= maxDepth || node->objects.size() < maxObjects) {
+    void insert(Node* node, const T& object, double x, double y, size_t depth) {
+        // If the point is not within the node's bounds, do nothing.
+        if (!node->bounds.contains(x, y))
+            return;
+
+        // If we're at maximum depth or there's room in this node, store the object.
+        if (!node->children[0] && (depth >= maxDepth || node->objects.size() < maxObjects)) {
             node->objects.emplace_back(object, std::make_pair(x, y));
             return;
         }
 
-        if (!node->children[0]) subdivide(node);
+        // Subdivide if not already done.
+        if (!node->children[0]) {
+            subdivide(node);
+            // Move existing objects into appropriate children.
+            auto temp = node->objects;
+            node->objects.clear();
+            for (const auto& obj : temp) {
+                for (auto& child : node->children) {
+                    if (child->bounds.contains(obj.second.first, obj.second.second)) {
+                        insert(child.get(), obj.first, obj.second.first, obj.second.second, depth + 1);
+                        break;
+                    }
+                }
+            }
+        }
 
+        // Insert the new object into the correct child.
         for (auto& child : node->children) {
             if (child->bounds.contains(x, y)) {
                 insert(child.get(), object, x, y, depth + 1);
@@ -123,5 +142,6 @@ private:
         for (int i = 0; i < 4; i++)
             node->children[i] = std::make_unique<Node>(node->bounds.getChild(i));
     }
+
 };
 

@@ -86,11 +86,11 @@ namespace GLContext {
 	pair<int, int> getWindowSize();
 	pair<int, int> getViewportSize();
 	
-	void drawPoint(vec2 position, double size = 5, vec4 color = vec4(1, 1, 1, 1));
-	void drawLine(vec2 position1, vec2 position2, double width = 1, vec4 color = vec4(1, 1, 1, 1));
-	void drawSquare(vec2 pos, double Size = 1.0f, double Thickness = 2.0f, vec4 Color = vec4(1, 1, 1, 1));
-	void drawRect(vec2 superiorLeft, vec2 inferiorRight, double Thickness = 1.5, vec4 Color = vec4(1, 1, 1, 1));
-	void drawCircle(vec2 pos, double radius = 1.0f, int numSegments = 5, double Thickness = 2.0f, vec4 Color = vec4(1, 1, 1, 1));
+	void drawPoint(pair<double,double> position, double size = 5, vec4 color = vec4(1, 1, 1, 1));
+	void drawLine(pair<double,double> position1, pair<double,double> position2, double width = 1, vec4 color = vec4(1, 1, 1, 1));
+	void drawSquare(pair<double,double> pos, double Size = 1.0f, double Thickness = 2.0f, vec4 Color = vec4(1, 1, 1, 1));
+	void drawRect(pair<double,double> superiorLeft, pair<double,double> inferiorRight, double Thickness = 1.5, vec4 Color = vec4(1, 1, 1, 1));
+	void drawCircle(pair<double,double> pos, double radius = 1.0f, int numSegments = 5, double Thickness = 2.0f, vec4 Color = vec4(1, 1, 1, 1));
 	void alphaClear();
 
 

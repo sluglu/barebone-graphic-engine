@@ -213,7 +213,7 @@ namespace GLContext {
                 ImGui::Begin("Viewport");
                 {
                     ImGui::BeginChild("Render");
-                    ImVec2 wsize = ImGui::GetWindowSize();
+                    auto wsize = ImGui::GetWindowSize();
                     ImGui::Image((void*)(intptr_t)GLContext::texture, wsize);
                     ImGui::EndChild();
                 }
@@ -341,30 +341,30 @@ namespace GLContext {
         else { return "Not saved"; }
     }
 
-    void drawPoint(vec2 position, double Thickness, vec4 Color) {
+    void drawPoint(pair<double,double> position, double Thickness, vec4 Color) {
         glColor4f(Color.x, Color.y, Color.z, Color.w);
         glPointSize(Thickness);
         glBegin(GL_POINTS);
-        glVertex2d(position.x, position.y);
+        glVertex2d(position.first, position.second);
         glEnd();
     }
 
-    void drawLine(vec2 position1, vec2 position2, double Thickness, vec4 Color) {
+    void drawLine(pair<double,double> position1, pair<double,double> position2, double Thickness, vec4 Color) {
         glColor4f(Color.x, Color.y, Color.z, Color.w);
         glLineWidth(Thickness);
         glBegin(GL_LINES);
-        glVertex2d(position1.x, position1.y);
-        glVertex2d(position2.x, position2.y);
+        glVertex2d(position1.first, position1.second);
+        glVertex2d(position2.first, position2.second);
         glEnd();
     }
 
-    void drawSquare(vec2 pos, double Size, double Thickness, vec4 Color) {
-        double x = pos.x;
-        double y = pos.y;
-        vec2 a = vec2(x - Size / 2.0f, y + Size / 2.0f);
-        vec2 b = vec2(x + Size / 2.0f, y + Size / 2.0f);
-        vec2 c = vec2(x + Size / 2.0f, y - Size / 2.0f);
-        vec2 d = vec2(x - Size / 2.0f, y - Size / 2.0f);
+    void drawSquare(pair<double,double> pos, double Size, double Thickness, vec4 Color) {
+        double x = pos.first;
+        double y = pos.second;
+        pair<double,double> a = pair<double,double>(x - Size / 2.0f, y + Size / 2.0f);
+        pair<double,double> b = pair<double,double>(x + Size / 2.0f, y + Size / 2.0f);
+        pair<double,double> c = pair<double,double>(x + Size / 2.0f, y - Size / 2.0f);
+        pair<double,double> d = pair<double,double>(x - Size / 2.0f, y - Size / 2.0f);
         drawPoint(a, Thickness, Color);
         drawLine(a, b, Thickness, Color);
         drawPoint(b, Thickness, Color);
@@ -375,20 +375,20 @@ namespace GLContext {
         drawLine(d, a, Thickness, Color);
     }
 
-    void drawRect(vec2 inferiorLeft, vec2 superiorRight, double Thickness, vec4 Color)
+    void drawRect(pair<double,double> inferiorLeft, pair<double,double> superiorRight, double Thickness, vec4 Color)
     {
         glColor4f(Color.x, Color.y, Color.z, Color.w);
         glLineWidth(Thickness);
         glBegin(GL_LINE_LOOP);
-        glVertex2d(inferiorLeft.x, superiorRight.y);
-        glVertex2d(superiorRight.x, superiorRight.y);
-        glVertex2d(superiorRight.x, inferiorLeft.y);
-        glVertex2d(inferiorLeft.x, inferiorLeft.y);
+        glVertex2d(inferiorLeft.first, superiorRight.second);
+        glVertex2d(superiorRight.first, superiorRight.second);
+        glVertex2d(superiorRight.first, inferiorLeft.second);
+        glVertex2d(inferiorLeft.first, inferiorLeft.second);
         glEnd();
 		
     }
 
-    void drawCircle(vec2 pos, double radius, int numSegments, double Thickness, vec4 Color) {
+    void drawCircle(pair<double,double> pos, double radius, int numSegments, double Thickness, vec4 Color) {
         glColor4f(Color.x, Color.y, Color.z, Color.w);
         glLineWidth(Thickness);
         glBegin(GL_LINE_LOOP);
@@ -396,7 +396,7 @@ namespace GLContext {
             double theta = 2.0f * 3.14159265358979323846264338327950f * static_cast<double>(i) / static_cast<double>(numSegments);
             double x = radius * cosf(theta);
             double y = radius * sinf(theta);
-            glVertex2d(pos.x + x, pos.y + y);
+            glVertex2d(pos.first + x, pos.second + y);
         }
         glEnd();
     }

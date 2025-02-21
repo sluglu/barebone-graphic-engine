@@ -8,30 +8,30 @@
 // =========================
 class AABB {
 public:
-    vec2 inferiorLeft, superiorRight;
+    pair<double,double> inferiorLeft, superiorRight;
 
-    AABB(vec2 inferiorLeft, vec2 superiorRight)
+    AABB(pair<double,double> inferiorLeft, pair<double,double> superiorRight)
         : inferiorLeft(inferiorLeft), superiorRight(superiorRight){
     }
 
     bool contains(double x, double y) const {
-        return x >= inferiorLeft.x && x < superiorRight.x && y >= inferiorLeft.y && y < superiorRight.y;
+        return x >= inferiorLeft.first && x < superiorRight.first && y >= inferiorLeft.second && y < superiorRight.second;
     }
 
     bool intersects(const AABB& other) const {
-        return !(superiorRight.x < other.inferiorLeft.x || inferiorLeft.x > other.superiorRight.x ||
-            superiorRight.y < other.inferiorLeft.y || inferiorLeft.y > other.superiorRight.y);
+        return !(superiorRight.first < other.inferiorLeft.first || inferiorLeft.first > other.superiorRight.first ||
+            superiorRight.second < other.inferiorLeft.second || inferiorLeft.second > other.superiorRight.second);
     }
 
     AABB getChild(int index) const {
-        double midX = (inferiorLeft.x + superiorRight.x) / 2.0;
-        double midY = (inferiorLeft.y + superiorRight.y) / 2.0;
+        double midX = (inferiorLeft.first + superiorRight.first) / 2.0;
+        double midY = (inferiorLeft.second + superiorRight.second) / 2.0;
 
         switch (index) {
-        case 0: return AABB(vec2(midX, midY), vec2(superiorRight.x, superiorRight.y));  // Top Right
-        case 1: return AABB(vec2(inferiorLeft.x, midY), vec2(midX, superiorRight.y));  // Top Left
-        case 2: return AABB(vec2(inferiorLeft.x, inferiorLeft.y), vec2(midX, midY));  // Bottom Left
-        case 3: return AABB(vec2(midX, inferiorLeft.y), vec2(superiorRight.x, midY));  // Bottom Right
+        case 0: return AABB(pair<double,double>(midX, midY), pair<double,double>(superiorRight.first, superiorRight.second));  // Top Right
+        case 1: return AABB(pair<double,double>(inferiorLeft.first, midY), pair<double,double>(midX, superiorRight.second));  // Top Left
+        case 2: return AABB(pair<double,double>(inferiorLeft.first, inferiorLeft.second), pair<double,double>(midX, midY));  // Bottom Left
+        case 3: return AABB(pair<double,double>(midX, inferiorLeft.second), pair<double,double>(superiorRight.first, midY));  // Bottom Right
         default: throw std::out_of_range("Invalid quadrant index");
         }
     }

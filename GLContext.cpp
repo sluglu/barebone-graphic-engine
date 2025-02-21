@@ -50,10 +50,6 @@ namespace GLContext {
         glfwSetWindowTitle(window, name);
 	}
 
-	double getElapsedTime() {
-		return glfwGetTime();
-	}
-
 
      Time getAbsoluteTime() {
 		 return Time();

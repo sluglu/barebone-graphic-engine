@@ -43,6 +43,9 @@ namespace GLContext {
 	extern void (*onDrawUI)();
 
 	struct Time {
+		int nanoseconds;
+		int microseconds;
+		int milliseconds;
 		int seconds;
 		int minutes;
 		int hours;
@@ -51,15 +54,19 @@ namespace GLContext {
 		int years;
 
 		Time() {
-			auto now = std::chrono::system_clock::now();
-			std::time_t now_time = std::chrono::system_clock::to_time_t(now);
 
-			seconds = localtime(&now_time)->tm_sec;
-			minutes = localtime(&now_time)->tm_min;
-			hours = localtime(&now_time)->tm_hour;
-			days = localtime(&now_time)->tm_mday;
-			months = localtime(&now_time)->tm_mon;
-			years = localtime(&now_time)->tm_year;
+			auto now = std::chrono::system_clock::now().time_since_epoch();
+			auto now_high_resolution = std::chrono::high_resolution_clock::now().time_since_epoch();
+			
+			nanoseconds = now.count();
+			microseconds = nanoseconds / 1000;
+			milliseconds = microseconds / 1000;
+			seconds = milliseconds / 1000;
+			minutes = seconds / 60;
+			hours = minutes / 60;
+			days = hours / 24;
+			months = days / 31;
+			years = days / 365;
 		}
 	};
 
@@ -72,7 +79,6 @@ namespace GLContext {
 
 	void setWindowName(const char* name);
 
-	double getElapsedTime();
 	Time getAbsoluteTime();
 
 	void restartSimTimer();
@@ -92,8 +98,5 @@ namespace GLContext {
 	void drawRect(pair<double,double> superiorLeft, pair<double,double> inferiorRight, double Thickness = 1.5, vec4 Color = vec4(1, 1, 1, 1));
 	void drawCircle(pair<double,double> pos, double radius = 1.0f, int numSegments = 5, double Thickness = 2.0f, vec4 Color = vec4(1, 1, 1, 1));
 	void alphaClear();
-
-
-	
 }
 

@@ -1,5 +1,6 @@
 #include <GLContext.h>
 #include <QuadTree.h>
+#include <utility.h>
 
 using namespace GLContext;
 
@@ -11,7 +12,7 @@ vec4 Color = vec4(1, 1, 1, 1);
 float i = 0.0f;
 float n = 0.0f;
 
-
+auto average = MovingAverage(100);
 
 struct particle {
 	pair<double,double> pos;
@@ -57,13 +58,20 @@ void frame() {
 	//}
 
 	
-
+	auto before = getAbsoluteTime();
+	
 
 	quadtree.draw(1.5, vec4(1, 1, 1, 1));
 	vector<particle> particles = quadtree.query(AABB(pair<double,double>(-1, -1), pair<double,double>(1, 1)));
 	for (particle& p : particles) {
 		drawPoint(pair<double,double>(p.pos.first, p.pos.second), 2, vec4(1, 0, 0, 1));
 	}
+
+	auto after = getAbsoluteTime().microseconds - before.microseconds;
+	average.addValue(after);
+	cout << average.getValue() << endl;
+
+
 }
 
 void ui() {

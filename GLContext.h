@@ -30,9 +30,6 @@ namespace GLContext {
 	extern int SCR_WIDTH;
 	extern int SCR_HEIGHT;
 
-	extern double simTime;
-	extern double simTimeStep;
-
 	extern int viewportResW;
 	extern int viewportResH;
 
@@ -42,33 +39,6 @@ namespace GLContext {
 	extern void (*onInit)();
 	extern void (*onDrawUI)();
 
-	struct Time {
-		int nanoseconds;
-		int microseconds;
-		int milliseconds;
-		int seconds;
-		int minutes;
-		int hours;
-		int days;
-		int months;
-		int years;
-
-		Time() {
-
-			auto now = std::chrono::system_clock::now().time_since_epoch();
-			auto now_high_resolution = std::chrono::high_resolution_clock::now().time_since_epoch();
-			
-			nanoseconds = now.count();
-			microseconds = nanoseconds / 1000;
-			milliseconds = microseconds / 1000;
-			seconds = milliseconds / 1000;
-			minutes = seconds / 60;
-			hours = minutes / 60;
-			days = hours / 24;
-			months = days / 31;
-			years = days / 365;
-		}
-	};
 
 	int randomInt(int min = -1000, int max = 1000);
 	double randomDouble(double min = -1, double max = 1);
@@ -78,14 +48,6 @@ namespace GLContext {
 	string TakeScreenshot();
 
 	void setWindowName(const char* name);
-
-	Time getAbsoluteTime();
-
-	void restartSimTimer();
-	double getSimTime();
-	void incrementSimTimer();
-	double getSimTimeStep();
-	void setSimTimeStep(double step);
 
 	void setWindowSize(int width, int height);
 	void setViewportSize(int width, int height);

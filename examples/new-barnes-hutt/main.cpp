@@ -12,6 +12,8 @@ vec4 Color = vec4(1, 1, 1, 1);
 float i = 0.0f;
 float n = 0.0f;
 
+fixedTime simTimer = fixedTime();
+
 auto average = MovingAverage(100);
 
 struct particle {
@@ -81,12 +83,12 @@ void ui() {
 		ImGui::InputFloat("radius", &radius);
 		ImGui::InputFloat("Thickness", &Thickness);
 		ImGui::ColorEdit4("Color", &Color[0]);
-		double step = getSimTimeStep();
+		double step = simTimer.getSimTimeStep();
 		if (ImGui::InputDouble("Time Step", &step)) {
-			setSimTimeStep(step);
+			simTimer.setSimTimeStep(step);
 		}
 		if(ImGui::Button("Restart Timer") ){
-			restartSimTimer();
+			simTimer.restartSimTimer();
 		};
 	ImGui::End();
 }
@@ -96,6 +98,6 @@ void main() {
 	GLContext::onDrawUI = ui;
 	GLContext::onDraw = frame;
 	GLContext::fpsCounter = true;
-	GLContext::setSimTimeStep(0.0001);
+	simTimer.setSimTimeStep(0.01);
 	GLContext::init(1000, 1000);
 }

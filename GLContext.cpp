@@ -50,11 +50,6 @@ namespace GLContext {
         glfwSetWindowTitle(window, name);
 	}
 
-
-     Time getAbsoluteTime() {
-		 return Time();
-     }
-
     
     void updateFPS() {
         if (GLContext::fpsCounter) {
@@ -63,30 +58,7 @@ namespace GLContext {
         }
     }
 
-    void restartSimTimer(){
-		simTime = 0.0;
-    }
-
-    double getSimTime()
-    {
-        return simTime;
-    }
-
-    void incrementSimTimer()
-    {
-		simTime += simTimeStep;
-    }
-
-    double getSimTimeStep()
-    {
-        return simTimeStep;
-    }
-
-    void setSimTimeStep(double step)
-    {
-		simTimeStep = step;
-    }
-
+    
     void setWindowSize(int width, int height)
     {
 		SCR_WIDTH = width;
